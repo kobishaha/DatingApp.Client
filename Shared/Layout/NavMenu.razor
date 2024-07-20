@@ -1,0 +1,26 @@
+@page "/"
+@inherits LayoutComponentBase
+
+<div class="sidebar">
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <NavLink class="nav-link" href="">Home</NavLink>
+        </li>
+        <li class="nav-item">
+            <NavLink class="nav-link" href="login">Login</NavLink>
+        </li>
+        <li class="nav-item">
+            <NavLink class="nav-link" href="register">Register</NavLink>
+        </li>
+        <li class="nav-item">
+            <NavLink class="nav-link" href="loginregister">Login/Register</NavLink>
+        </li>
+        <AuthorizeView>
+            <Authorized>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="userslist">Users List</NavLink>
+                </li>
+            </Authorized>
+        </AuthorizeView>
+    </ul>
+</div>

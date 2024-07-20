@@ -1,0 +1,40 @@
+@page "/userslist"
+@inject IUserService UserService
+@inject NavigationManager Navigation
+
+
+<AuthorizeView>
+    <Authorized>
+        <h3>Online Users</h3>
+        <div class="users-list">
+            @if (users == null)
+            {
+                <p>Loading...</p>
+            }
+            else if (!users.Any())
+            {
+                <p>No users online.</p>
+            }
+            else
+            {
+                @foreach (var user in users)
+                {
+                    <UserCard @key="user.Id" User="user" />
+                }
+            }
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>You are not authorized to view this page. Please <a href="/login">login</a>.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+    private List<User>? users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await UserService.GetOnlineUsersAsync();
+    }
+}

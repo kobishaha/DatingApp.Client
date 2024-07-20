@@ -1,0 +1,13 @@
+
+
+<div class="user-card">
+    <p><strong>@user.FirstName @user.LastName</strong></p>
+    <p>Nickname: @user.NickName</p>
+    <p>Email: @user.Email</p>
+    <p>Phone: @user.PhoneNumber</p>
+</div>
+
+@code {
+    [Parameter]
+    public required User user { get; set; }
+}

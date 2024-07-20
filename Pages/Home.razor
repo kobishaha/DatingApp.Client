@@ -1,0 +1,73 @@
+@page "/"
+
+<Header />
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudPaper Class="pa-4" Elevation="4">
+        <MudGrid>
+            <MudItem xs="12" md="6">
+                <MudText Typo="Typo.h3">Find Your Love Today!</MudText>
+                <MudText Typo="Typo.subtitle1" Class="mb-4">Join our community and start your journey.</MudText>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                    OnClick="@(() => Navigation.NavigateTo("/register"))">Get Started</MudButton>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <img src="your-image-url.jpg" alt="Love image" style="width:100%;" />
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+    <MudPaper Class="pa-4 mt-6" Elevation="4">
+        <MudText Typo="Typo.h4" Class="mb-4">How It Works</MudText>
+        <MudGrid>
+            <MudItem xs="12" md="4">
+                <MudIcon Icon="fas fa-user-plus" Size="Size.Large" Color="Color.Primary" />
+                <MudText Typo="Typo.h6">Sign Up</MudText>
+                <MudText Typo="Typo.body1">Create a free account in just a few steps.</MudText>
+            </MudItem>
+            <MudItem xs="12" md="4">
+                <MudIcon Icon="fas fa-search" Size="Size.Large" Color="Color.Primary" />
+                <MudText Typo="Typo.h6">Search</MudText>
+                <MudText Typo="Typo.body1">Find matches based on your preferences.</MudText>
+            </MudItem>
+            <MudItem xs="12" md="4">
+                <MudIcon Icon="fas fa-comments" Size="Size.Large" Color="Color.Primary" />
+                <MudText Typo="Typo.h6">Chat</MudText>
+                <MudText Typo="Typo.body1">Start chatting and get to know each other.</MudText>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+    <MudPaper Class="pa-4 mt-6" Elevation="4">
+        <MudText Typo="Typo.h4" Class="mb-4">Testimonials</MudText>
+        <MudGrid>
+            <MudItem xs="12" md="4">
+                <MudPaper Class="pa-2">
+                    <MudText Typo="Typo.subtitle1">"I found the love of my life here!"</MudText>
+                    <MudText Typo="Typo.body2">- Jane Doe</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="4">
+                <MudPaper Class="pa-2">
+                    <MudText Typo="Typo.subtitle1">"Great platform, easy to use!"</MudText>
+                    <MudText Typo="Typo.body2">- John Smith</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="4">
+                <MudPaper Class="pa-2">
+                    <MudText Typo="Typo.subtitle1">"Highly recommended!"</MudText>
+                    <MudText Typo="Typo.body2">- Sarah Johnson</MudText>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+
+    </MudPaper>
+</MudContainer>
+
+<Footer />
+
+@code {
+
+    [Inject]
+    public required NavigationManager Navigation { get; set; }
+}
