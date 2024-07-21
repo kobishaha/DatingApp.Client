@@ -22,7 +22,7 @@ namespace DatingApp.Client.Services
         {
             if (await _context.Users.AnyAsync(u => u.Email == model.Email))
             {
-                return new AuthResult { Success = false, Message = "Email already in use." };
+                return new AuthResult { Success = false, Message = "Email already in use.", Token = string.Empty };
             }
 
             var user = new User
@@ -32,13 +32,14 @@ namespace DatingApp.Client.Services
                 NickName = model.NickName,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
-                Password = BCrypt.Net.BCrypt.HashPassword(model.Password)
+                Password = BCrypt.Net.BCrypt.HashPassword(model.Password),
+                Username = model.Email // Assuming email is used as username
             };
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return new AuthResult { Success = true, Message = "User registered successfully" };
+            return new AuthResult { Success = true, Message = "User registered successfully", Token = string.Empty };
         }
 
         public async Task<AuthResult> Login(LoginModel model)
@@ -47,7 +48,7 @@ namespace DatingApp.Client.Services
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
             {
-                return new AuthResult { Success = false, Message = "Invalid email or password." };
+                return new AuthResult { Success = false, Message = "Invalid email or password.", Token = string.Empty };
             }
 
             var token = GenerateJwtToken(user);

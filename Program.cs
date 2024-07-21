@@ -5,7 +5,8 @@ using System.Text;
 using DatingApp.Client.Services;
 using DatingApp.Client.Data;
 using Microsoft.EntityFrameworkCore;
-using DatingApp.Client.Shared.Components;
+using DatingApp.Client.Shared;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +26,7 @@ builder.Services.AddHttpContextAccessor();
 
 // Configure JWT authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");
-var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]);
-
+var key = Encoding.ASCII.GetBytes(jwtSettings["Key"] ?? string.Empty);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
