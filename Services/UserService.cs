@@ -10,8 +10,22 @@ public class UserService(DataContext context) : IUserService
 
     public async Task<User> GetUserByUsernameAsync(string username)
     {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+        if (string.IsNullOrWhiteSpace(username))
+        {
+            throw new ArgumentException("Username cannot be null or empty.", nameof(username));
+        }
+
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"User with username '{username}' not found.");
+        }
+
+        return user;
     }
+
 
     public async Task<User> RegisterAsync(User user)
     {
