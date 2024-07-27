@@ -13,20 +13,37 @@
 }
 
 @code {
-    private RegisterModel registerModel = new RegisterModel
-    {
-        FirstName = "",
-        LastName = "",
-        NickName = "",
-        Email = "",
-        PhoneNumber = "",
-        Password = "",
-        ConfirmPassword = ""
-    };
+    private RegisterModel? registerModel = new RegisterModel
+        {
+            FirstName = "",
+            LastName = "",
+            NickName = "",
+            Email = "",
+            PhoneNumber = "",
+            Password = "",
+            ConfirmPassword = ""
+        };
     private AuthResult? authResult;
 
     private async Task HandleRegister()
     {
-        // HandleRegister logic remains unchanged
+        try
+        {
+            if (registerModel == null)
+            {
+                throw new InvalidOperationException("Register model is null");
+            }
+
+            authResult = await AuthService.Register(registerModel);
+            if (authResult != null && authResult.Success)
+            {
+                Navigation.NavigateTo("/dashboard");
+            }
+        }
+        catch (Exception)
+        {
+            authResult = new AuthResult { Success = false, Message = "An unexpected error occurred. Please try again." };
+            // Log the exception
+        }
     }
 }
