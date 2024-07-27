@@ -1,25 +1,13 @@
 @inherits LayoutComponentBase
 
-<div class="sidebar">
-    <ul class="nav flex-column">
-        <li class="nav-item">
-            <NavLink class="nav-link" href="">Home</NavLink>
-        </li>
-        <li class="nav-item">
-            <NavLink class="nav-link" href="login">Login</NavLink>
-        </li>
-        <li class="nav-item">
-            <NavLink class="nav-link" href="register">Register</NavLink>
-        </li>
-        <li class="nav-item">
-            <NavLink class="nav-link" href="loginregister">Login/Register</NavLink>
-        </li>
-        <AuthorizeView>
-            <Authorized>
-                <li class="nav-item">
-                    <NavLink class="nav-link" href="userslist">Users List</NavLink>
-                </li>
-            </Authorized>
-        </AuthorizeView>
-    </ul>
-</div>
+<MudNavMenu>
+    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+    <MudNavLink Href="login" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Login">Login</MudNavLink>
+    <MudNavLink Href="register" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PersonAdd">Register</MudNavLink>
+    <MudNavLink Href="loginregister" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.AppRegistration">Login/Register</MudNavLink>
+    <AuthorizeView>
+        <Authorized>
+            <MudNavLink Href="userslist" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People">Users List</MudNavLink>
+        </Authorized>
+    </AuthorizeView>
+</MudNavMenu>

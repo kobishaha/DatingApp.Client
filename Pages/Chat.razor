@@ -1,0 +1,17 @@
+@page "/chat/{MatchId?}"
+
+<h3>Chat</h3>
+
+@if (string.IsNullOrEmpty(MatchId))
+{
+    <p>No match selected.</p>
+}
+else
+{
+    <p>Chatting with match ID: @MatchId</p>
+}
+
+@code {
+    [Parameter]
+    public string? MatchId { get; set; }
+}

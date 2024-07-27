@@ -1,73 +1,41 @@
 @page "/"
+@inject NavigationManager NavigationManager
+@inject IStringLocalizer<Home> Localizer
 
-<Header />
+<PageTitle>Home</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Large">
-    <MudPaper Class="pa-4" Elevation="4">
-        <MudGrid>
-            <MudItem xs="12" md="6">
-                <MudText Typo="Typo.h3">Find Your Love Today!</MudText>
-                <MudText Typo="Typo.subtitle1" Class="mb-4">Join our community and start your journey.</MudText>
-                <MudButton Variant="Variant.Filled" Color="Color.Primary"
-                    OnClick="@(() => Navigation.NavigateTo("/register"))">Get Started</MudButton>
-            </MudItem>
-            <MudItem xs="12" md="6">
-                <img src="your-image-url.jpg" alt="Love image" style="width:100%;" />
-            </MudItem>
-        </MudGrid>
-    </MudPaper>
+<MudText Typo="Typo.h3" GutterBottom="true">Welcome to Dating App</MudText>
 
-    <MudPaper Class="pa-4 mt-6" Elevation="4">
-        <MudText Typo="Typo.h4" Class="mb-4">How It Works</MudText>
-        <MudGrid>
-            <MudItem xs="12" md="4">
-                <MudIcon Icon="fas fa-user-plus" Size="Size.Large" Color="Color.Primary" />
-                <MudText Typo="Typo.h6">Sign Up</MudText>
-                <MudText Typo="Typo.body1">Create a free account in just a few steps.</MudText>
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <MudIcon Icon="fas fa-search" Size="Size.Large" Color="Color.Primary" />
-                <MudText Typo="Typo.h6">Search</MudText>
-                <MudText Typo="Typo.body1">Find matches based on your preferences.</MudText>
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <MudIcon Icon="fas fa-comments" Size="Size.Large" Color="Color.Primary" />
-                <MudText Typo="Typo.h6">Chat</MudText>
-                <MudText Typo="Typo.body1">Start chatting and get to know each other.</MudText>
-            </MudItem>
-        </MudGrid>
-    </MudPaper>
+<MudButton Color="Color.Primary" Variant="Variant.Filled"
+    OnClick="@(() => NavigationManager.NavigateTo("/loginregister"))">
+    @Localizer["LoginRegister"]
+</MudButton>
 
-    <MudPaper Class="pa-4 mt-6" Elevation="4">
-        <MudText Typo="Typo.h4" Class="mb-4">Testimonials</MudText>
-        <MudGrid>
-            <MudItem xs="12" md="4">
-                <MudPaper Class="pa-2">
-                    <MudText Typo="Typo.subtitle1">"I found the love of my life here!"</MudText>
-                    <MudText Typo="Typo.body2">- Jane Doe</MudText>
-                </MudPaper>
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <MudPaper Class="pa-2">
-                    <MudText Typo="Typo.subtitle1">"Great platform, easy to use!"</MudText>
-                    <MudText Typo="Typo.body2">- John Smith</MudText>
-                </MudPaper>
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <MudPaper Class="pa-2">
-                    <MudText Typo="Typo.subtitle1">"Highly recommended!"</MudText>
-                    <MudText Typo="Typo.body2">- Sarah Johnson</MudText>
-                </MudPaper>
-            </MudItem>
-        </MudGrid>
+<MudGrid>
+    @foreach (var testimonial in testimonials)
+    {
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard>
+                <MudCardContent>
+                    <MudText Typo="Typo.body1">@testimonial.Content</MudText>
+                    <MudText Typo="Typo.caption">- @testimonial.Author</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    }
+    </MudGrid>
 
-    </MudPaper>
-</MudContainer>
+    @code {
+    private List<Testimonial> testimonials = new List<Testimonial>
+{
+new Testimonial { Content = "I found my soulmate here!", Author = "John" },
+new Testimonial { Content = "Great experience, highly recommend!", Author = "Sarah" },
+new Testimonial { Content = "Easy to use and fun!", Author = "Mike" }
+};
 
-<Footer />
-
-@code {
-
-    [Inject]
-    public required NavigationManager Navigation { get; set; }
+    private class Testimonial
+    {
+        public string Content { get; set; } = string.Empty;
+        public string Author { get; set; } = string.Empty;
+    }
 }

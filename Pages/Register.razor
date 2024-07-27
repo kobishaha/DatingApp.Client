@@ -1,0 +1,46 @@
+@page "/register"
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+
+<h3>Register</h3>
+
+<EditForm Model="@registerModel" OnValidSubmit="HandleRegistration">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <MudTextField @bind-Value="registerModel.FirstName" Label="First Name" />
+    <MudTextField @bind-Value="registerModel.LastName" Label="Last Name" />
+    <MudTextField @bind-Value="registerModel.NickName" Label="Nickname" />
+    <MudTextField @bind-Value="registerModel.Email" Label="Email" />
+    <MudTextField @bind-Value="registerModel.PhoneNumber" Label="Phone Number" />
+    <MudTextField @bind-Value="registerModel.Password" Label="Password" InputType="InputType.Password" />
+    <MudTextField @bind-Value="registerModel.ConfirmPassword" Label="Confirm Password" InputType="InputType.Password" />
+
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Register</MudButton>
+</EditForm>
+
+@code {
+    private RegisterModel registerModel = new RegisterModel
+        {
+            FirstName = "",
+            LastName = "",
+            NickName = "",
+            Email = "",
+            PhoneNumber = "",
+            Password = "",
+            ConfirmPassword = ""
+        };
+
+    private async Task HandleRegistration()
+    {
+        var result = await AuthService.Register(registerModel);
+        if (result.Success)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            // Handle registration failure
+        }
+    }
+}

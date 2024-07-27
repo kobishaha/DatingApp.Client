@@ -1,0 +1,29 @@
+@page "/login"
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthStateProvider
+
+<h3>Login</h3>
+
+<EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <MudTextField @bind-Value="loginModel.Email" Label="Email" />
+    <MudTextField @bind-Value="loginModel.Password" Label="Password" InputType="InputType.Password" />
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Login</MudButton>
+</EditForm>
+
+@code {
+    private LoginModel loginModel = new LoginModel();
+
+    private async Task HandleLogin()
+    {
+        var result = await AuthService.Login(loginModel);
+        if (result.Success)
+        {
+            await ((CustomAuthStateProvider)AuthStateProvider).MarkUserAsAuthenticated(result.Token);
+            NavigationManager.NavigateTo("/");
+        }
+    }
+}

@@ -6,6 +6,10 @@ using DatingApp.Client.Services;
 using DatingApp.Client.Data;
 using Microsoft.EntityFrameworkCore;
 using DatingApp.Client.Shared;
+using Microsoft.Extensions.Localization;
+
+
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,8 +25,22 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+// Add HttpClient
+builder.Services.AddHttpClient();
+builder.Services.AddLocalization();
+builder.Services.AddSingleton<IStringLocalizerFactory, ResourceManagerStringLocalizerFactory>();
+
 // Add IHttpContextAccessor
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+  var supportedCultures = new[] { "en-US", "he-IL", "es-ES" }; // Add the cultures you want to support
+  options.SetDefaultCulture(supportedCultures[0])
+      .AddSupportedCultures(supportedCultures)
+      .AddSupportedUICultures(supportedCultures);
+});
+
 
 // Configure JWT authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -30,53 +48,31 @@ var key = Encoding.ASCII.GetBytes(jwtSettings["Key"] ?? string.Empty);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.RequireHttpsMetadata = false;
-        options.SaveToken = true;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtSettings["Issuer"],
-            ValidAudience = jwtSettings["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(key)
-        };
+      options.TokenValidationParameters = new TokenValidationParameters
+      {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+      };
     });
-
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
-});
-
-// Add CORS policy
-builder.Services.AddCors(corsOptions =>
-{
-    corsOptions.AddPolicy("AllowAllOrigins",
-        corsPolicyBuilder =>
-        {
-            corsPolicyBuilder.AllowAnyOrigin()
-                             .AllowAnyMethod()
-                             .AllowAnyHeader();
-        });
-});
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
+  app.UseExceptionHandler("/Error");
+  app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseAntiforgery();
+
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors("AllowAllOrigins");
+app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
