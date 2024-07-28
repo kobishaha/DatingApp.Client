@@ -1,77 +1,64 @@
 @page "/application-roles"
-@inject IJSRuntime JSRuntime
-@inject NavigationManager NavigationManager
 @inject DialogService DialogService
-@inject ContextMenuService ContextMenuService
-@inject TooltipService TooltipService
-@inject NotificationService NotificationService
+@inject SecurityService Security
 @attribute [Authorize]
 
 <PageTitle>Roles</PageTitle>
 <RadzenStack>
-    <RadzenRow AlignItems="AlignItems.Center">
-        <RadzenColumn Size="12" SizeMD="6">
-            <RadzenText Text="Roles" TextStyle="TextStyle.H3" TagName="TagName.H1" style="margin: 0" />
-        </RadzenColumn>
-        <RadzenColumn Size="12" SizeMD="6">
-            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
-                <RadzenButton Icon="add_circle_outline" Text="Add" Click="@AddClick" Variant="Variant.Flat" />
-            </RadzenStack>
-        </RadzenColumn>
-    </RadzenRow>
-    <RadzenRow>
-        <RadzenColumn SizeMD="12">
-            <RadzenAlert Size="AlertSize.Large" Shade="Shade.Light" AlertStyle="AlertStyle.Danger" Variant="Variant.Flat" Title="Cannot delete role" Visible="@errorVisible">@error</RadzenAlert>
-            <RadzenDataGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" ShowPagingSummary="true" PageSizeOptions=@(new int[]{5, 10, 20, 30}) AllowSorting="true" Data="@roles" TItem="DatingApp.Client.Models.ApplicationRole">
-                <Columns>
-                    <RadzenDataGridColumn TItem="DatingApp.Client.Models.ApplicationRole" Property="Name" Title="Name" />
-                    <RadzenDataGridColumn TItem="DatingApp.Client.Models.ApplicationRole" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
-                        <Template Context="role">
-                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small"
-                                Variant="Variant.Flat" Shade="Shade.Lighter" Click="@(() => DeleteClick(role))" @onclick:stopPropagation="true" />
-                        </Template>
-                    </RadzenDataGridColumn>
-                </Columns>
-            </RadzenDataGrid>
-        </RadzenColumn>
-    </RadzenRow>
+    <!-- ... -->
 </RadzenStack>
+
 @code {
-        protected IEnumerable<DatingApp.Client.Models.ApplicationRole> roles;
-        protected RadzenDataGrid<DatingApp.Client.Models.ApplicationRole> grid0;
-        protected string error;
-        protected bool errorVisible;
+    protected IEnumerable<DatingApp.Client.Models.ApplicationRole> roles;
+    protected RadzenDataGrid<DatingApp.Client.Models.ApplicationRole> grid0;
+    protected string error;
+    protected bool errorVisible;
 
-        [Inject]
-        protected SecurityService Security { get; set; }
-
-        protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
+    {
+        if (Security != null)
         {
             roles = await Security.GetRoles();
         }
+    }
 
-        protected async Task AddClick()
+    protected async Task AddClick()
+    {
+        await DialogService.OpenAsync<AddApplicationRole>("Add Application Role");
+
+        try
         {
-            await DialogService.OpenAsync<AddApplicationRole>("Add Application Role");
-
-            roles = await Security.GetRoles();
-        }
-
-        protected async Task DeleteClick(DatingApp.Client.Models.ApplicationRole role)
-        {
-            try
+            if (Security != null)
             {
-                if (await DialogService.Confirm("Are you sure you want to delete this role?") == true)
+                roles = await Security.GetRoles();
+            }
+        }
+        catch (Exception ex)
+        {
+            errorVisible = true;
+            error = ex.Message;
+            // Log the exception
+        }
+    }
+
+    protected async Task DeleteClick(DatingApp.Client.Models.ApplicationRole role)
+    {
+        try
+        {
+            if (await DialogService.Confirm("Are you sure you want to delete this role?") == true)
+            {
+                if (Security != null)
                 {
                     await Security.DeleteRole($"{role.Id}");
-
                     roles = await Security.GetRoles();
                 }
             }
-            catch (Exception ex)
-            {
-                errorVisible = true;
-                error = ex.Message;
-            }
         }
+        catch (Exception ex)
+        {
+            errorVisible = true;
+            error = ex.Message;
+            // Log the exception
+        }
+    }
 }

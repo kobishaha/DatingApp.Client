@@ -115,7 +115,7 @@ namespace DatingApp.Client
 
         public async Task<ApplicationAuthenticationState> GetAuthenticationStateAsync()
         {
-            var uri =  new Uri($"{navigationManager.BaseUri}Account/CurrentUser");
+            var uri = new Uri($"{navigationManager.BaseUri}Account/CurrentUser");
 
             var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, uri));
 
@@ -148,7 +148,7 @@ namespace DatingApp.Client
         public async Task<ApplicationRole> CreateRole(ApplicationRole role)
         {
 
-            if(Tenant != null)
+            if (Tenant != null)
             {
                 role.TenantId = Tenant.Id;
             }
@@ -185,7 +185,7 @@ namespace DatingApp.Client
         public async Task<ApplicationUser> CreateUser(ApplicationUser user)
         {
 
-            if(Tenant != null)
+            if (Tenant != null)
             {
                 user.TenantId = Tenant.Id;
             }
@@ -298,7 +298,7 @@ namespace DatingApp.Client
         }
         public async Task ChangePassword(string oldPassword, string newPassword)
         {
-            var uri =  new Uri($"{navigationManager.BaseUri}Account/ChangePassword");
+            var uri = new Uri($"{navigationManager.BaseUri}Account/ChangePassword");
 
             var content = new FormUrlEncodedContent(new Dictionary<string, string> {
                 { "oldPassword", oldPassword },
@@ -317,7 +317,7 @@ namespace DatingApp.Client
 
         public async Task Register(string userName, string password)
         {
-            var uri =  new Uri($"{navigationManager.BaseUri}Account/Register");
+            var uri = new Uri($"{navigationManager.BaseUri}Account/Register");
 
             var content = new FormUrlEncodedContent(new Dictionary<string, string> {
                 { "userName", userName },
@@ -336,7 +336,7 @@ namespace DatingApp.Client
 
         public async Task ResetPassword(string userName)
         {
-            var uri =  new Uri($"{navigationManager.BaseUri}Account/ResetPassword");
+            var uri = new Uri($"{navigationManager.BaseUri}Account/ResetPassword");
 
             var content = new FormUrlEncodedContent(new Dictionary<string, string> {
                 { "userName", userName }
