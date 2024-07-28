@@ -32,7 +32,7 @@ namespace DatingApp.Client.Models
             }
         }
 
-        public ICollection<ApplicationRole> Roles { get; set; }
+        public ICollection<ApplicationRole>? Roles { get; set; }
 
         public int? TenantId { get; set; }
 
