@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using DatingApp.Client.Models;
 
 namespace DatingApp.Client.Services

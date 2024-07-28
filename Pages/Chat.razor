@@ -1,4 +1,5 @@
 @page "/chat/{MatchId?}"
+@attribute [Authorize]
 
 <h3>Chat</h3>
 
@@ -14,4 +15,7 @@ else
 @code {
     [Parameter]
     public string? MatchId { get; set; }
+
+    [Inject]
+    protected SecurityService Security { get; set; }
 }

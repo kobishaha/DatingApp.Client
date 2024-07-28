@@ -1,15 +1,21 @@
 @page "/"
+@attribute [Authorize]
 @inject NavigationManager NavigationManager
 @inject IStringLocalizer<Home> Localizer
+@using Radzen
+@using DatingApp.Client.Components
+@using DatingApp.Client.Shared
+@using DatingApp.Client.Pages
+@using Radzen.Blazor
 
 <PageTitle>Home</PageTitle>
 
 <MudText Typo="Typo.h3" GutterBottom="true">Welcome to Dating App</MudText>
 
-<MudButton Color="Color.Primary" Variant="Variant.Filled"
+<RadzenButton Color="Color.Primary" Variant="Radzen.Variant.Filled"
     OnClick="@(() => NavigationManager.NavigateTo("/loginregister"))">
     @Localizer["LoginRegister"]
-</MudButton>
+</RadzenButton>
 
 <MudGrid>
     @foreach (var testimonial in testimonials)
@@ -32,6 +38,9 @@ new Testimonial { Content = "I found my soulmate here!", Author = "John" },
 new Testimonial { Content = "Great experience, highly recommend!", Author = "Sarah" },
 new Testimonial { Content = "Easy to use and fun!", Author = "Mike" }
 };
+
+    [Inject]
+    protected  SecurityService? Security { get; }
 
     private class Testimonial
     {

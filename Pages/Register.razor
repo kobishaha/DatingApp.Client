@@ -1,6 +1,8 @@
 @page "/register"
+@attribute [Authorize]
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
+@inject SecurityService Security
 
 <h3>Register</h3>
 

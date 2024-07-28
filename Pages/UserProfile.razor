@@ -24,6 +24,17 @@ else
 
 @code {
     private User? user;
+    public SecurityService? _security;
+
+    [Inject]
+    public SecurityService Security { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // ...
+        _security = Security; // Initialize _security with the injected instance
+                              // ...
+    }
 
     protected override async Task OnInitializedAsync()
     {

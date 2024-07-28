@@ -1,9 +1,17 @@
 @page "/userslist"
-@inject IUserService UserService
-@inject NavigationManager Navigation
+@attribute [Authorize]
+@inject IUserService userService
+@using DatingApp.Client.Models
+@using Radzen.Blazor
+<style>
+    /* ... existing styles ... */
+</style>
+
+<h1>Users List</h1>
 
 
 <AuthorizeView>
+
     <Authorized>
         <h3>Online Users</h3>
         <div class="users-list">
@@ -11,15 +19,39 @@
             {
                 <p>Loading...</p>
             }
-            else if (!users.Any())
-            {
-                <p>No users online.</p>
-            }
             else
             {
-                @foreach (var user in users)
+                @if (users.Any())
                 {
-                    <UserCard @key="user.Id" User="user" />
+                    <div class="user-grid">
+                        @foreach (var user in users)
+                        {
+                            @if (user == null)
+                            {
+                                <p>Invalid user data.</p>
+                                continue;
+                            }
+
+                            <RadzenCard class="user-card">
+                                <div class="user-avatar">
+                                    <img src="@user.AvatarUrl" alt="@user.UserName" />
+                                </div>
+                                <RadzenCardBody>
+                                    <RadzenCardTitle>
+                                        <h3>@user.UserName</h3>
+                                    </RadzenCardTitle>
+                                    <p>@user.Email</p>
+                                    <RadzenCardFooter>
+                                        <p>Last seen: @user.LastSeen.ToString("dd/MM/yyyy HH:mm:ss")</p>
+                                    </RadzenCardFooter>
+                                </RadzenCardBody>
+                            </RadzenCard>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p>No users online.</p>
                 }
             }
         </div>
@@ -30,11 +62,18 @@
 </AuthorizeView>
 
 @code {
-
     private List<User>? users;
 
     protected override async Task OnInitializedAsync()
     {
-        users = await UserService.GetOnlineUsersAsync();
+        try
+        {
+            users = await userService.GetOnlineUsersAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to get online users: {ex.Message}");
+            users = new List<User>();
+        }
     }
 }

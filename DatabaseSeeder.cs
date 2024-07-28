@@ -1,7 +1,6 @@
 using Bogus;
 using DatingApp.Client.Data;
 using DatingApp.Client.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace DatingApp.Client
 {

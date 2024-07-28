@@ -32,6 +32,9 @@
 @code {
     private bool _drawerOpen = true;
 
+    [Inject]
+    protected SecurityService Security { get; set; }
+
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;

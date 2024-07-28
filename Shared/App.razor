@@ -1,4 +1,4 @@
-﻿@using DatingApp.Client.Shared.Layout
+@using DatingApp.Client.Shared.Layout
 @using Microsoft.AspNetCore.Components.Authorization
 <!DOCTYPE html>
 
@@ -19,17 +19,12 @@
     <CascadingAuthenticationState>
         <Router AppAssembly="@typeof(App).Assembly">
             <Found Context="routeData">
-
                 <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                     <NotAuthorized>
-                        @{
-                            <p>You are not authorized to access this resource.</p>
-                        }
+                        <p>You are not authorized to access this resource.</p>
                     </NotAuthorized>
                     <Authorizing>
-                        @{
-                            <p>Authorization in progress...</p>
-                        }
+                        <p>Authorization in progress...</p>
                     </Authorizing>
                 </AuthorizeRouteView>
             </Found>
