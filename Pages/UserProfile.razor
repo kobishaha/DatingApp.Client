@@ -1,6 +1,38 @@
-@page "/UserProfile.razor"
-@attribute [Authorize]
+@page "/profile"
+@inject IUserService UserService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
 
-<h3>Your Profile</h3>
+@attribute [Authorize] // Protect this page with authorization
 
-<!-- Add profile editing form here -->
+<h3>User Profile</h3>
+
+@if (user != null)
+{
+    <p>Welcome, @user.FirstName!</p>
+    <p>Email: @user.Email</p>
+    <p>Nickname: @user.NickName</p>
+    <p>Phone Number: @user.PhoneNumber</p>
+
+    <!-- Add more profile details or editing functionality here -->
+}
+else
+{
+    <p>Loading profile...</p>
+}
+
+@code {
+    private User? user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var userIdClaim = authState.User.FindFirst(ClaimTypes.NameIdentifier); // Assuming user ID is in NameIdentifier claim
+
+        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+        {
+            user = await UserService.GetUserAsync(userId);
+        }
+    }
+}

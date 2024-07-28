@@ -6,10 +6,12 @@ namespace DatingApp.Client.Services
     public class AuthService : IAuthService
     {
         private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public AuthService(HttpClient httpClient)
+        public AuthService(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClient;
+            _httpClientFactory = httpClientFactory;
+            _httpClient = _httpClientFactory.CreateClient("AuthAPI");
         }
 
         public async Task<AuthResult> Login(LoginModel loginModel)
@@ -35,7 +37,7 @@ namespace DatingApp.Client.Services
 
         public async Task Logout()
         {
-            // Implement logout logic here
+            await _httpClient.PostAsync("api/auth/logout", null);
         }
     }
 }

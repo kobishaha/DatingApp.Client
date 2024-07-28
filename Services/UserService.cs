@@ -38,6 +38,11 @@ public class UserService(DataContext context) : IUserService
     {
         return await _context.Users.ToListAsync(); // Replace with actual logic for online users
     }
+
+    public Task<User> GetUserAsync(int userId)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 public interface IUserService
@@ -45,4 +50,6 @@ public interface IUserService
     Task<User> GetUserByUsernameAsync(string username);
     Task<User> RegisterAsync(User user);
     Task<List<User>> GetOnlineUsersAsync();
+
+    Task<User> GetUserAsync(int userId);
 }

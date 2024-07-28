@@ -1,29 +1,38 @@
-@page "/login"
-@inject IAuthService AuthService
-@inject NavigationManager NavigationManager
-@inject AuthenticationStateProvider AuthStateProvider
+@page "/profile"
+@inject IUserService UserService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
 
-<h3>Login</h3>
+@attribute [Authorize] // Protect this page with authorization
 
-<EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+<h3>User Profile</h3>
 
-    <MudTextField @bind-Value="loginModel.Email" Label="Email" />
-    <MudTextField @bind-Value="loginModel.Password" Label="Password" InputType="InputType.Password" />
-    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Login</MudButton>
-</EditForm>
+@if (user != null)
+{
+    <p>Welcome, @user.FirstName!</p>
+    <p>Email: @user.Email</p>
+    <p>Nickname: @user.NickName</p>
+    <p>Phone Number: @user.PhoneNumber</p>
+
+    <!-- Add more profile details or editing functionality here -->
+}
+else
+{
+    <p>Loading profile...</p>
+}
 
 @code {
-    private LoginModel loginModel = new LoginModel();
+    private User? user;
 
-    private async Task HandleLogin()
+    protected override async Task OnInitializedAsync()
     {
-        var result = await AuthService.Login(loginModel);
-        if (result.Success)
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var userIdClaim = authState.User.FindFirst(ClaimTypes.NameIdentifier); // Assuming user ID is in NameIdentifier claim
+
+        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
         {
-            await ((CustomAuthStateProvider)AuthStateProvider).MarkUserAsAuthenticated(result.Token);
-            NavigationManager.NavigateTo("/");
+            user = await UserService.GetUserAsync(userId);
         }
     }
 }
