@@ -11,7 +11,6 @@ using DatingApp.Client.Models;
 using Microsoft.AspNetCore.OData;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.AspNetCore.Components.Authorization;
-using DatingApp.Client.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.

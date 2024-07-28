@@ -1,7 +1,3 @@
-
-using System;
-using System.Collections.Generic;
-
 namespace DatingApp.Client.Models
 {
     public class ApplicationClaim

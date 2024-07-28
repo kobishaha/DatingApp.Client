@@ -19,24 +19,19 @@
     <CascadingAuthenticationState>
         <Router AppAssembly="@typeof(App).Assembly">
             <Found Context="routeData">
-                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
-                    <NotAuthorized>
-                        <p>You are not authorized to access this resource.</p>
-                    </NotAuthorized>
-                    <Authorizing>
-                        <p>Authorization in progress...</p>
-                    </Authorizing>
-                </AuthorizeRouteView>
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
             </Found>
             <NotFound>
-                <PageTitle>Not found</PageTitle>
-                <LayoutView Layout="@typeof(MainLayout)">
-                    <p role="alert">Sorry, there's nothing at this address.</p>
-                </LayoutView>
+                <p>Sorry, there's nothing at this address.</p>
             </NotFound>
         </Router>
     </CascadingAuthenticationState>
 
+    <AuthorizeView>
+        <NotAuthorized>
+            <p>You are not authorized to access this resource.</p>
+        </NotAuthorized>
+    </AuthorizeView>
     <script src="_framework/blazor.server.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
 </body>

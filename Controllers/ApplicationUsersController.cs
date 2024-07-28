@@ -1,16 +1,10 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.OData.Results;
 using Microsoft.AspNetCore.OData.Deltas;
-using System.ComponentModel.DataAnnotations.Schema;
 
 using DatingApp.Client.Data;
 using DatingApp.Client.Models;

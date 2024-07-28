@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
@@ -11,7 +8,12 @@ namespace DatingApp.Client.Models
     public partial class ApplicationUser : IdentityUser
     {
         [JsonIgnore, IgnoreDataMember]
-        public override string PasswordHash { get; set; }
+        public override string? PasswordHash
+        {
+            get => base.PasswordHash;
+            set => base.PasswordHash = value;
+        }
+
 
         [NotMapped]
         public string Password { get; set; }
